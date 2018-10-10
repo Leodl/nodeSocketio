@@ -24,16 +24,28 @@
   <script type="text/javascript" src="socket.io-client/dist/socket.io.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.js"></script>
   <script>
-  $(function () {
-    var socket = io();
+  $(function () {   
+    var socket = io(); //初始化
     $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
+      socket.emit('chat message', $('#m').val());  //发送消息给服务器
       $('#m').val('');
       return false;
     });
-    socket.on('chat message', function(msg){
+
+    //接收服务器消息
+    socket.on('chat message', function(msg){ 
       $('#messages').append($('<li>').text(msg));
     });
+
+    socket.on('connect', () => {
+      console.log(socket);
+     });
+    socket.on('disconnect', (timeout) => {
+      console.log("连接断开")
+     });
+    socket.on('reconnect', (timeout) => {
+      console.log('重新连接')
+   });
   });
   </script>
 </html>
